@@ -9,6 +9,7 @@ cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 clienteFile = '../db/cliente.csv'
+categoriaFile = '../db/categoria.csv'
 
 @app.route('/cliente/inserir', methods=['POST'])
 def inserirCliente():
@@ -77,3 +78,76 @@ def reinserirClienteCsv(clientes):
         writer_object = writer(planilha, delimiter=';')
         writer_object.writerows(linhas)  
         planilha.close()
+
+
+        ###########################################
+
+# C A T E G O R I A
+
+@app.route('/categoria/inserir', methods=['POST'])
+def inserirCategoria():
+    categoria = json.loads(request.data)
+    inserirCategoriaCsv(categoria)
+    return { 'message': 'Categoria salvo com sucesso' }
+
+
+@app.route('/categoria/listar', methods=['GET'])
+def listarCategoria():
+    categoria = listarCategoriaCsv()
+    return json.dumps(categoria)
+
+#para a exclusão, é necessário reconstruir toda a planilha
+#pra isso, faremos a obtenção de todos os dados da planilha e adicionaremos todos novamente com exceção
+#ao número da linha que virá como parâmetro neste método (end-point)
+@app.route('/categoria/deletar/<nroLinha>', methods=['DELETE'])
+def deletarCategoria(nroLinha):
+    categorias = listarCategoriaCsv()
+    novosCategorias = []       
+
+    i = 0
+    for categoria in categorias:        
+        if int(nroLinha) != i:
+            novosCategorias.append(categoria)
+        i = i + 1
+
+    reinserirCategoriaCsv(novosCategorias)
+    return { 'message': 'Categoria deletado com sucesso' }
+
+
+def listarCategoriaCsv():
+    categorias = []
+    with open(categoriaFile, 'r', encoding='latin-1') as planilha:
+        tabela = csv.reader(planilha, delimiter=';')
+        count = 1        
+        for linha in tabela:
+            if count != 1: #aqui estamos pulando a linha que corresponde ao cabeçalho do csv
+                categorias.append({ 
+                    'id': linha[0], 
+                    'academico': linha[1], 
+                    'romance': linha[2],
+                    'espirita': linha[3]
+                })
+            count += 1
+
+    return categorias
+
+
+def inserirCategoriaCsv(categoria):
+    novaLinha = [categoria["id"], categoria["academico"], categoria["romance"], categoria["espirita"]]
+    with open(categoriaFile, 'a', newline='') as planilha:  
+        writer_object = writer(planilha, delimiter=';')
+        writer_object.writerow(novaLinha)  
+        planilha.close()
+
+def reinserirCategoriaCsv(categorias):
+    linhas = []
+    linhas.append(["id", "academico", "romance", "espirita"]) #é necessário inserir novamente o cabeçalho da planilha
+
+    for categoria in categorias:
+        novaLinha = [categoria["id"], categoria["academico"], categoria["romance"], categoria["espirita"]]
+        linhas.append(novaLinha)
+
+    with open(categoriaFile, 'w', newline='') as planilha:  
+        writer_object = writer(planilha, delimiter=';')
+        writer_object.writerows(linhas)  
+        planilha.close()        

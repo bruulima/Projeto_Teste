@@ -22,49 +22,61 @@ Funcionalidade é um conjunto de ações de uma tela específica, que contempla 
 
 - Categoria
     - Id
-    - Acadêmico
-    - Romance
-    - Espírita
+    - Selecione a categoria
+        - Acadêmico
+        - Romance
+        - Espírita
+
 - Título
     - Id
-    - Cor da capa
+    - Id autor
+    - Id editora
+    - Nome do título
     - Quantidade de páginas
-    - Peso
     - Valor
+
 - Autor
     - Id
     - Nome
-    - Estado
-    - País
+    - Nacionalidade
+
 - Editora
     - Id
     - Nome
     - Fundação
     - Estado
     - País
+
 - Coleção
     - Id
     - Id Título
-    - Id Autore
+    - Id Autor
     - Id Editora
+
 - Idioma
     - Id
-    - 
+    - Idioma
+
 - Cliente
     - Id
     - Nome
     - Telefone
     - Email
     - CPF
-- Fornecedor
-    - Id
-    - Nome
+
 - Venda
-    - Id
-    -  
+    - Id Titulo
+    - Quantidade
+    - Valor
+
 - Depoimento
-    - Id
-    -  
+    - Nome
+    - Depoimento
+
+- Promoção
+    - Id Titulo
+    - Desconto
+
 
 ## AÇÕES
 As ações das funcionalidades são consistidas por estas:
