@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <title>
+            Cadastro de autores
+        </title>     
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+        
+    <body>
+
+        <h1>Cadastro de autores</h1>
+        <br>
+
+        Id:
+        <br>
+        <input type="text" id="id">
+        <br><br>
+
+        Nome:
+        <br>
+        <input type="text" id="nome">
+        <br><br>
+
+        Nacionalidade:
+        <br>
+        <input type="text" id="nacionalidade">
+        <br><br>
+
+        <button onclick="inserir()">Salvar</button>
+
+        <a href="autores.html">
+            <button>Voltar</button>
+        </a>        
+
+    </body>
+</html>
+
+<!-- 
+    Aqui abaixo nós colocamos
+    o código javascript para construir o JSON
+    e enviá-lo a API
+-->
+
+<script language="javascript">
+    function inserir(){
+
+        //Criando variáveis com os dados obtidos
+        //nos campos do formulário no HTML
+        var id = document.getElementById("id").value
+        var nome = document.getElementById("nome").value
+        var nacionalidade = document.getElementById("nacionalidade").value
+
+        //Construindo o JSON que será
+        //enviado para a API
+        var json = {
+            'id': id,
+            'nome': nome,
+            'nacionalidade': nacionalidade
+        }
+
+        //Enviando para a API o json 
+        //construído na etapa anterior
+        fetch('http://127.0.0.1:5000/autor/inserir',
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            method: "POST",
+            body: JSON.stringify(json)
+        })
+        .then(function(res){ 
+            res.json()
+                .then(data => {
+                    console.log(data)
+                    window.open("autores.html");
+                })
+        })
+        .catch(function(res){ console.log(res) })
+    }
+</script>

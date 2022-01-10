@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <title>
+            Cadastro de titulo
+        </title>     
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    </head>
+        
+    <body>
+
+        <h1>Cadastro de titulo</h1>
+        <br>
+
+        Id:
+        <br>
+        <input type="text" id="id">
+        <br><br>
+
+        Id Autor:
+        <br>
+        <input type="text" id="idAutor">
+        <br><br>
+
+        Id Editora:
+        <br>
+        <input type="text" id="idEditora">
+        <br><br>
+
+        Nome do Título:
+        <br>
+        <input type="text" id="nomeDoTitulo">
+        <br><br>
+
+        Quantidade de Páginas:
+        <br>
+        <input type="text" id="quantidadeDePaginas">
+        <br><br>
+
+        Valor:
+        <br>
+        <input type="text" id="valor">
+        <br><br>
+        
+        <button onclick="inserir()">Salvar</button>
+
+        <a href="titulos.html">
+            <button>Voltar</button>
+        </a>        
+
+    </body>
+</html>
+
+<!-- 
+    Aqui abaixo nós colocamos
+    o código javascript para construir o JSON
+    e enviá-lo a API
+-->
+
+<script language="javascript">
+    function inserir(){
+
+        //Criando variáveis com os dados obtidos
+        //nos campos do formulário no HTML
+        var id = document.getElementById("id").value
+        var idAutor = document.getElementById("idAutor").value
+        var idEditora = document.getElementById("idEditora").value
+        var nomeDoTitulo = document.getElementById("nomeDoTitulo").value
+        var quantidadeDePaginas = document.getElementById("quantidadeDePaginas").value
+        var valor = document.getElementById("valor").value
+
+        //Construindo o JSON que será
+        //enviado para a API
+        var json = {
+            'id': id,
+            'idAutor': idAutor,
+            'idEditora': idEditora,
+            'nomeDoTitulo': nomeDoTitulo,
+            'quantidadeDePaginas': quantidadeDePaginas,
+            'valor': valor
+        }
+
+        //Enviando para a API o json 
+        //construído na etapa anterior
+        fetch('http://127.0.0.1:5000/titulo/inserir',
+        {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            method: "POST",
+            body: JSON.stringify(json)
+        })
+        .then(function(res){ 
+            res.json()
+                .then(data => {
+                    console.log(data)
+                    window.open("titulos.html");
+                })
+        })
+        .catch(function(res){ console.log(res) })
+    }
+</script>
